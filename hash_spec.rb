@@ -147,7 +147,7 @@ RSpec.describe 'Hash' do
 
       result = h.default_proc
 
-      expect(result.class).to eql(Proc)
+      expect(result).to be_a_kind_of(Proc)
     end
 
     it "returns nil if default is not a block" do
@@ -156,6 +156,25 @@ RSpec.describe 'Hash' do
       result = h.default_proc
 
       expect(result).to be_nil
+    end
+
+  end
+
+  describe "#delete" do
+    it "deletes value matching key pair" do
+      h = {a: 1, b: 2, c: 3}
+
+      h.delete(:a)
+
+      expect(h).to eql({b:2, c:3})
+    end
+
+    it "returns the value matching key pair" do
+      h = {a: 1, b: 2, c: 3}
+
+      result = h.delete(:a)
+
+      expect(result).to eql(1)
     end
 
   end

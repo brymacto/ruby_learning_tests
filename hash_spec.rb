@@ -276,7 +276,73 @@ RSpec.describe 'Hash' do
 
       expect(result).to eql({1=>:a, 2=>:b})
     end
+  end
 
+  describe "#keep_if" do
+    it "deletes every pair for which block evaluates to false" do
+      h = {a: 1, b: 2, c: 3, d: 11, e: 12, f: 13}
+      h.keep_if{ |key,value| value < 10 }
+
+      expect(h).to eql({a: 1, b: 2, c: 3})
+
+    end
+  end
+
+
+  describe "#key" do
+    it "returns key of given value" do
+      h = {a: 1, b: 2, c: 3, d: 11, e: 12, f: 13}
+
+      result = h.key(1)
+
+      expect(result).to eql(:a)
+    end
+  end
+
+  describe "#keys" do
+    it "returns array with keys from hash" do
+      h = {a: 1, b: 2, c: 3, d: 11, e: 12, f: 13}
+
+      result = h.keys
+
+      expect(result).to eql([:a, :b, :c, :d, :e, :f])
+    end
+  end
+
+  describe "#length" do
+    it "returns number of pairs in hash" do
+      h = {a: 1, b: 2, c: 3, d: 11, e: 12, f: 13}
+
+      result = h.length
+
+      expect(result).to eql(6)
+    end
+  end
+
+  describe "#merge" do
+    it "merges two hashes, using value of 'other' hash when key matches" do
+      h1 = {a: 1, b: 2}
+      h2 = {b: 3, c: 4}
+
+      result = h1.merge(h2)
+
+      expect(result).to eql({a: 1, b: 3, c: 4})
+    end
+  end
+
+  describe "#rassoc" do
+    it "returns first key value pair as an array that matches" do
+      h = {a: 1, b: 2, c: 3, d: 3, e: 3, f: 3}
+
+      result = h.rassoc(3)
+
+      expect(result).to eql([:c, 3])
+    end
+  end
+
+  describe "#rehash" do
+    it "rehashes current hash based on hash values for each key" do
+    end
   end
 
 

@@ -58,5 +58,66 @@ RSpec.describe 'Hash' do
     end
   end
 
+  describe "any" do
+    it "returns true when value matches block" do
+      h = {a: 2, b: 3, c: 5}
+
+      result = h.any? {|key, value| (value % 2) == 0 }
+
+      expect(result).to eql(true)
+    end
+
+    it "returns true when key matches block" do
+      h = {a: 2, b: 3, c: 5}
+
+      result = h.any? {|key, value| key == :b }
+
+      expect(result).to eql(true)
+    end
+  end
+
+  describe "assoc" do
+    it "returns key value pair if a match is found" do
+      h = {a: 2, b: 3, c: 5}
+
+      result = h.assoc(:a)
+
+      expect(result).to eql([:a, 2])
+    end
+
+    it "returns nil if a match is not found" do
+      h = {a: 2, b: 3, c: 5}
+
+      result = h.assoc(:d)
+
+      expect(result).to eql(nil)
+    end
+  end
+
+  describe "clear" do
+    it "clears all key/value pairs from hash" do
+      h = {a: 2, b: 3, c: 5}
+
+      h.clear
+
+      expect(h).to eql({})
+
+    end
+  end
+
+  describe "compare by identity" do
+    it "makes the hash compare by identity (object_id)" do
+      h = {"a" => 1, "b" => 2, "c" => 3}
+      
+      result_before_action = h["a"]
+      h.compare_by_identity
+      result_after_action = h["a"]
+
+      expect(result_before_action).to eql(1)
+      expect(result_after_action).to eql(nil)
+    end
+
+  end
+
 
 end

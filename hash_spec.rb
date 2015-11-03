@@ -58,7 +58,7 @@ RSpec.describe 'Hash' do
     end
   end
 
-  describe "any" do
+  describe "#any" do
     it "returns true when value matches block" do
       h = {a: 2, b: 3, c: 5}
 
@@ -76,7 +76,7 @@ RSpec.describe 'Hash' do
     end
   end
 
-  describe "assoc" do
+  describe "#assoc" do
     it "returns key value pair if a match is found" do
       h = {a: 2, b: 3, c: 5}
 
@@ -90,11 +90,11 @@ RSpec.describe 'Hash' do
 
       result = h.assoc(:d)
 
-      expect(result).to eql(nil)
+      expect(result).to be_nil
     end
   end
 
-  describe "clear" do
+  describe "#clear" do
     it "clears all key/value pairs from hash" do
       h = {a: 2, b: 3, c: 5}
 
@@ -105,7 +105,7 @@ RSpec.describe 'Hash' do
     end
   end
 
-  describe "compare by identity" do
+  describe "#compare_by_identity" do
     it "makes the hash compare by identity (object_id)" do
       h = {"a" => 1, "b" => 2, "c" => 3}
       
@@ -114,7 +114,48 @@ RSpec.describe 'Hash' do
       result_after_action = h["a"]
 
       expect(result_before_action).to eql(1)
-      expect(result_after_action).to eql(nil)
+      expect(result_after_action).to be_nil
+    end
+
+  end
+
+  describe "#default" do
+    it "returns nil if no default specified" do
+      h = {a: 1, b: 2}
+
+      result = h.default
+      result2 = h[:c]
+
+      expect(result).to be_nil
+      expect(result2).to be_nil
+    end
+
+    it "returns default if specified" do
+      h = Hash.new(0)
+
+      result = h.default
+      result2 = h[:c]
+
+      expect(result).to eql(0)
+      expect(result2).to eql(0)
+    end
+  end
+
+  describe "#default_proc" do
+    it "returns block if default is a block" do
+      h = Hash.new{|hash,key| hash[key] = "Default value for key #{k}"}
+
+      result = h.default_proc
+
+      expect(result.class).to eql(Proc)
+    end
+
+    it "returns nil if default is not a block" do
+      h = Hash.new('default')
+
+      result = h.default_proc
+
+      expect(result).to be_nil
     end
 
   end

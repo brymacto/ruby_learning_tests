@@ -177,7 +177,109 @@ RSpec.describe 'Hash' do
       expect(result).to eql(1)
     end
 
+    it "returns nil if no matching key" do
+      h = {a: 1, b: 2, c: 3}
+
+      result = h.delete(:d)
+
+      expect(result).to be_nil
+    end
+
   end
+
+  describe "#delete_if" do
+    it "deletes if value matches condition" do
+      h = {a: 1, b: 2, c: 3, d: 11, e: 12, f: 13}
+      
+      h.delete_if { |key, value|
+        value > 10
+      }
+
+      expect(h).to eql({a: 1, b: 2, c: 3})
+    end
+  end
+
+  describe "#each" do
+    it "calls block with key and value" do
+      result = []
+      h = {a: 1, b: 2, c: 3}
+
+      h.each{|key, value| result << [key, value]}
+
+      expect(result).to eql([[:a, 1], [:b, 2], [:c, 3]])
+    end
+  end
+
+  describe "#empty" do
+    it "returns true for empty hash" do
+      h = {}
+
+      result = h.empty?
+
+      expect(result).to eql(true)
+    end
+  end
+
+  describe "#fetch" do
+    it "raises KeyError if no match found, and no block was provided" do
+      h = {a: 1, b: 2, c: 3}
+
+      expect { h.fetch(:d) }.to raise_error(KeyError)
+    end
+    it "returns result of block if no match found, and block was provided" do
+      h = {a: 1, b: 2, c: 3}
+
+      result = h.fetch(:d) {|el| "Error for #{el}"}
+
+      expect(result).to eql("Error for d")      
+    end
+  end
+
+  describe "#flatten" do
+    it "returns a new array that is a one-dimensional flattening of the hash" do
+      h = {a: 1, b: 2, c: 3}
+      
+      result = h.flatten
+
+      expect(result).to eql([:a, 1, :b, 2, :c, 3])
+    end
+
+  end
+
+  describe "#has_key" do 
+    it "returns true if given key is present, false if it is not" do
+      h = {a: 1, b: 2, c: 3}
+
+      result = h.has_key?(:a)
+      result2 = h.has_key?(:d)
+
+      expect(result).to eql(true)
+      expect(result2).to eql(false)
+    end
+  end
+
+  describe "#to_s" do
+    it "converts hash to string" do
+      h = {a: 1, b: 2}
+
+      result = h.to_s
+
+      expect(result).to eql("{:a=>1, :b=>2}")
+    end
+  end
+
+  describe "#invert" do 
+    it "inverts keys and values" do
+      h = {a: 1, b: 2}
+
+      result = h.invert
+
+      expect(result).to eql({1=>:a, 2=>:b})
+    end
+
+  end
+
+
 
 
 end

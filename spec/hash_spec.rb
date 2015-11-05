@@ -1,6 +1,6 @@
 RSpec.describe 'Hash' do
   describe '== [other hash]' do
-  
+
     it "returns true if other hash has exact same keys and values" do 
       h1 = {a: 2, b: 3}
       h2 = {a: 2, b: 3}
@@ -385,13 +385,116 @@ RSpec.describe 'Hash' do
       expect(result).to eql({a: 1, b: 2, c: 3})
     end
 
-    it "returns enumerator consisting of entries for which block returns true" do
+    it "returns enumerator when block is not provided" do
       h = {a: 1, b: 2, c: 3, d: 11, e: 12, f: 13}
 
-      result = h.select{ |k,v| }
+      result = h.select
 
-      expect(result).to eql({a: 1, b: 2, c: 3})
+      expect(result).to be_a(Enumerator)
     end
+  end
+
+  describe "#shift" do
+    it "removes key-value pair from hash" do
+      h = {a: 1, b: 2, c: 3}
+
+      h.shift
+
+      expect(h).to eql({b: 2, c:3})
+    end
+
+    it "returns removed pair as an array" do
+      h = {a: 1, b: 2, c: 3}
+
+      result = h.shift
+
+      expect(result).to eql([:a, 1])
+    end
+  end
+
+  describe "#store" do
+    it "updates value in hash for given key" do
+      h = {a: 1, b: 2, c: 3}
+
+      h.store(:a, 0)
+
+      expect(h).to eql({a: 0, b: 2, c: 3})
+    end
+  end
+
+  describe "#to_a" do
+    it "returns nested array converted from hash" do
+      h = {a: 1, b: 2, c: 3}
+
+      result = h.to_a
+
+      expect(result).to eql([[:a,1],[:b, 2],[:c, 3]])
+
+    end
+  end
+
+  describe "#update" do
+    it "adds contents of other hash to hash" do
+      h = {a: 1, b: 2}
+      h2 = {c: 3, d: 4}
+
+      h.update(h2)
+
+      expect(h).to eql({a: 1, b: 2, c: 3, d: 4})
+    end
+    it "overwrites duplicates if no block provided" do
+      h = {a: 1, b: 2}
+      h2 = {b: 3, c: 4}
+
+      h.update(h2)
+
+      expect(h).to eql({a: 1, b: 3, c: 4})
+    end
+
+    it "overwrites duplicates based on block, when provided" do
+      h = {a: 1, b: 2, c: 3}
+      h2 = {a: 4, b: 5, c: 6}
+
+      h.update(h2) { |key, v1, v2|
+        if key == :a
+          v2
+        else
+          v1
+        end
+      }
+
+      expect(h).to eql({a: 4, b: 2, c: 3})
+    end
+  end
+
+  describe "#values" do
+    it "returns array of values from hash" do
+      h = {a: 1, b: 2, c: 3}
+
+      result = h.values
+
+      expect(result).to eql([1,2,3])
+    end
+  end
+
+  describe "#values_at" do
+    it "returns array of values associated with given keys" do
+      h = {a: 1, b: 2, c: 3, d: 4}
+
+      result = h.values_at(:a, :c)
+
+      expect(result).to eql([1, 3])
+    end
+
+    it "returns nil if given keys are not present in hash" do
+      h = {a: 1, b: 2, c: 3, d: 4}
+
+      result = h.values_at(:e, :f)
+
+      expect(result).to eql([nil, nil])
+    end
+
+
   end
 
 

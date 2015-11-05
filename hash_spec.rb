@@ -340,12 +340,30 @@ RSpec.describe 'Hash' do
     end
   end
 
-  describe "#rehash" do
-    it "rehashes current hash based on hash values for each key" do
+  describe "#rehash" do    
+    it "rehashes current hash based on hash values for each key, when key objects have changed" do
+      a = [0,1]
+      b = [2,3]
+
+      h = {a => :x, b => :y}
+
+      a[0] = 9
+      expect(h[a]).to be_nil
+
+      h.rehash
+      expect(h[a]).to eql(:x)
     end
   end
 
+  describe "#reject" do
+    it "returns a new hash consisting of entries for which block returns false" do
+      h = {a: 1, b: 2, c: 3, d: 11, e: 12, f: 13}
 
+      result = h.reject { |key, value| value > 10}
+
+      expect(result).to eql({a: 1, b: 2, c: 3})
+    end
+  end
 
 
 end

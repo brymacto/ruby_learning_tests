@@ -365,5 +365,34 @@ RSpec.describe 'Hash' do
     end
   end
 
+  describe "#replace" do
+    it "replaces contents of hash with other hash" do
+      h = {a: 1, b: 2}
+      h2 = {c: 3, d: 4}
+
+      h.replace(h2)
+
+      expect(h).to eql({c:3, d: 4})
+    end
+  end
+
+  describe "#select" do 
+    it "returns new hash consisting of entries for which block returns true" do
+      h = {a: 1, b: 2, c: 3, d: 11, e: 12, f: 13}
+
+      result = h.select{ |key, value| value < 10 }
+
+      expect(result).to eql({a: 1, b: 2, c: 3})
+    end
+
+    it "returns enumerator consisting of entries for which block returns true" do
+      h = {a: 1, b: 2, c: 3, d: 11, e: 12, f: 13}
+
+      result = h.select{ |k,v| }
+
+      expect(result).to eql({a: 1, b: 2, c: 3})
+    end
+  end
+
 
 end
